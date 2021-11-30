@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const cors = require("cors");
 
 const userRoute = require("./routes/user")
 dotenv.config();
@@ -9,7 +10,7 @@ dotenv.config();
 mongoose
     .connect(process.env.MONGO_URL, {
         useNewUrlParser: true,
-        useUnifiedTopology: true,
+        // useUnifiedTopology: true,
     })
     .then(() => console.log("DB Connection Successfull!"))
     .catch((err) => {
@@ -17,6 +18,7 @@ mongoose
     });
 
 //middleware
+app.use(cors());
 app.use(express.json());
 
 app.use("/api/users", userRoute);
