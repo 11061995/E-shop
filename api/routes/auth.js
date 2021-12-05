@@ -24,10 +24,10 @@ router.post("/register", async(req, res) => {
 
 //LOGIN
 
-router.post('/login', async(req, res) => {
+router.post("/login", async(req, res) => {
     try {
         const user = await User.findOne({
-            userName: req.body.user_name
+            userName: req.body.user_name,
         });
 
         !user && res.status(401).json("Wrong User Name");
@@ -37,13 +37,11 @@ router.post('/login', async(req, res) => {
             process.env.PASS_SEC
         );
 
-
         const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
         const inputPassword = req.body.password;
 
-        originalPassword != inputPassword &&
-            res.status(401).json("Wrong Password");
+        originalPassword != inputPassword && res.status(401).json("Wrong Password");
 
         const accessToken = jwt.sign({
                 id: user._id,
@@ -54,11 +52,9 @@ router.post('/login', async(req, res) => {
 
         const { password, ...others } = user._doc;
         res.status(200).json({...others, accessToken });
-
     } catch (err) {
         res.status(500).json(err);
     }
-
 });
 
 module.exports = router;
